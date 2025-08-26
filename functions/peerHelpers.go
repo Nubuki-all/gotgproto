@@ -13,11 +13,13 @@ func GetChatIdFromPeer(peer tg.PeerClass) int64 {
 	var ID constant.TDLibPeerID
 	switch peer := peer.(type) {
 	case *tg.PeerChannel:
-		return int64(ID.Channel(peer.ChannelID))
+		ID.Channel(peer.ChannelID)
+		return int64(ID)
 	case *tg.PeerUser:
 		return peer.UserID
 	case *tg.PeerChat:
-		return int64(ID.Chat(peer.ChatID))
+		ID.Chat(peer.ChatID)
+		return int64(ID)
 	default:
 		return 0
 	}
