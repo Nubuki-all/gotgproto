@@ -4,18 +4,20 @@ import (
 	"context"
 
 	"github.com/celestix/gotgproto/storage"
+	"github.com/gotd/td/constant"
 	"github.com/gotd/td/tg"
 )
 
 // GetChatIdFromPeer returns the chat/user id from the provided tg.PeerClass.
 func GetChatIdFromPeer(peer tg.PeerClass) int64 {
+	var ID constant.TDLibPeerID
 	switch peer := peer.(type) {
 	case *tg.PeerChannel:
-		return peer.ChannelID
+		return int64(ID.Channel(peer.ChannelID))
 	case *tg.PeerUser:
 		return peer.UserID
 	case *tg.PeerChat:
-		return peer.ChatID
+		return int64(ID.Chat(peer.ChatID))
 	default:
 		return 0
 	}
