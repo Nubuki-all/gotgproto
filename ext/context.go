@@ -169,12 +169,13 @@ func (ctx *Context) Reply(upd *Update, text ReplyTextType, opts *ReplyOpts) (*ty
 
 // SendMessage invokes method messages.sendMessage#d9d75a4 returning error if any.
 func (ctx *Context) SendMessage(chatId int64, request *tg.MessagesSendMessageRequest) (*types.Message, error) {
+	var err error
 	if request == nil {
 		request = &tg.MessagesSendMessageRequest{}
 	}
 	request.RandomID = ctx.generateRandomID()
 	if request.Peer == nil {
-		request.Peer, err := ctx.ResolveInputPeerById(chatId)
+		request.Peer, err = ctx.ResolveInputPeerById(chatId)
 		if err != nil {
 			return nil, err
 		}
@@ -195,12 +196,13 @@ func (ctx *Context) SendMessage(chatId int64, request *tg.MessagesSendMessageReq
 
 // SendMedia invokes method messages.sendMedia#e25ff8e0 returning error if any. Send a media
 func (ctx *Context) SendMedia(chatId int64, request *tg.MessagesSendMediaRequest) (*types.Message, error) {
+	var err error
 	if request == nil {
 		request = &tg.MessagesSendMediaRequest{}
 	}
 	request.RandomID = ctx.generateRandomID()
 	if request.Peer == nil {
-		request.Peer, err := ctx.ResolveInputPeerById(chatId)
+		request.Peer, err = ctx.ResolveInputPeerById(chatId)
 		if err != nil {
 			return nil, err
 		}
@@ -266,11 +268,12 @@ func (ctx *Context) SendInlineBotResult(chatId int64, request *tg.MessagesSendIn
 
 // SendReaction invokes method messages.sendReaction#25690ce4 returning error if any.
 func (ctx *Context) SendReaction(chatId int64, request *tg.MessagesSendReactionRequest) (*types.Message, error) {
+	var err error
 	if request == nil {
 		request = &tg.MessagesSendReactionRequest{}
 	}
 	if request.Peer == nil {
-		request.Peer, err := ctx.ResolveInputPeerById(chatId)
+		request.Peer, err = ctx.ResolveInputPeerById(chatId)
 		if err != nil {
 			return nil, err
 		}
@@ -291,11 +294,12 @@ func (ctx *Context) SendReaction(chatId int64, request *tg.MessagesSendReactionR
 
 // SendMultiMedia invokes method messages.sendMultiMedia#f803138f returning error if any. Send an album or grouped media¹
 func (ctx *Context) SendMultiMedia(chatId int64, request *tg.MessagesSendMultiMediaRequest) (*types.Message, error) {
+	var err error
 	if request == nil {
 		request = &tg.MessagesSendMultiMediaRequest{}
 	}
 	if request.Peer == nil {
-		request.Peer, err := ctx.ResolveInputPeerById(chatId)
+		request.Peer, err = ctx.ResolveInputPeerById(chatId)
 		if err != nil {
 			return nil, err
 		}
@@ -322,11 +326,12 @@ func (ctx *Context) AnswerCallback(request *tg.MessagesSetBotCallbackAnswerReque
 
 // EditMessage invokes method messages.editMessage#48f71778 returning error if any. Edit message
 func (ctx *Context) EditMessage(chatId int64, request *tg.MessagesEditMessageRequest) (*types.Message, error) {
+	var err error
 	if request == nil {
 		request = &tg.MessagesEditMessageRequest{}
 	}
 	if request.Peer == nil {
-		request.Peer, err := ctx.ResolveInputPeerById(chatId)
+		request.Peer, err = ctx.ResolveInputPeerById(chatId)
 		if err != nil {
 			return nil, err
 		}
