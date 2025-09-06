@@ -233,6 +233,13 @@ func (u *Update) fillUserIdFromMessage(selfUserId int64) {
 			return
 		}
 	}
+	if m := u.EffectiveMessage; m != nil && m.PeerID != nil {
+		userPeer, ok := m.PeerID.(*tg.PeerUser)
+		if ok {
+			u.userId = userPeer.UserID
+			return
+		}
+	}
 	if u.Entities != nil && u.Entities.Users != nil {
 		for uId := range u.Entities.Users {
 			if uId == selfUserId {
