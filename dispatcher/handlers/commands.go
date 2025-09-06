@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/celestix/gotgproto/dispatcher/handlers/filters"
@@ -32,14 +31,10 @@ func NewCommand(name string, response CallbackResponse) Command {
 
 func (c Command) CheckUpdate(ctx *ext.Context, u *ext.Update) error {
 	m := u.EffectiveMessage
-	if m != nil {
-		fmt.Println(m.Text)
-	}
 	if m == nil || m.Text == "" {
 		return nil
 	}
 	if !c.Outgoing && m.Out {
-		fmt.Println(m.Out)
 		return nil
 	}
 	if c.UpdateFilters != nil && !c.UpdateFilters(u) {
@@ -51,7 +46,6 @@ func (c Command) CheckUpdate(ctx *ext.Context, u *ext.Update) error {
 	for _, prefix := range c.Prefix {
 		if arg[0] == byte(prefix) {
 			if arg[1:] == c.Name {
-				fmt.Println("Attempted")
 				return c.Callback(ctx, u)
 			} else if split := strings.Split(arg[1:], "@"); split[0] == c.Name {
 				if split[1] == strings.ToLower(ctx.Self.Username) {
