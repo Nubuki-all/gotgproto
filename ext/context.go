@@ -854,10 +854,10 @@ func (ctx *Context) ExportInvoice(inputMedia tg.InputMediaClass) (*tg.PaymentsEx
 	return ctx.Raw.PaymentsExportInvoice(ctx, inputMedia)
 }
 
-func (ctx *Context) SetPreCheckoutResults(success bool, queryId int64, err string) (bool, error) {
+func (ctx *Context) SetPreCheckoutResults(success bool, queryID int64, err string) (bool, error) {
 	return ctx.Raw.MessagesSetBotPrecheckoutResults(ctx, &tg.MessagesSetBotPrecheckoutResultsRequest{
 		Success: success,
-		QueryID: queryId,
+		QueryID: queryID,
 		Error:   err,
 	})
 }
