@@ -409,7 +409,7 @@ func (ctx *Context) BanChatMember(chatId, userId int64, untilDate int) (tg.Updat
 	if err != nil  {
 		return nil, err
 	}
-	switch _ = inputPeerChat.(type) {
+	switch inputPeerChat.(type) {
     case *tg.InputPeerChannel:
     case *tg.InputPeerChat:
     case *tg.InputPeerEmpty:
@@ -421,7 +421,7 @@ func (ctx *Context) BanChatMember(chatId, userId int64, untilDate int) (tg.Updat
 	if err != nil  {
 		return nil, err
 	}
-	switch _ = inputPeerUser.(type) {
+	switch inputPeerUser.(type) {
 	case *tg.InputPeerUser:
 	case *tg.InputPeerEmpty:
         return nil, mtp_errors.ErrPeerNotFound
@@ -437,7 +437,7 @@ func (ctx *Context) UnbanChatMember(chatId, userId int64) (bool, error) {
 	if err != nil  {
 		return nil, err
 	}
-	switch _ = inputPeerChat.(type) {
+	switch inputPeerChat.(type) {
     case *tg.InputPeerChannel:
     case *tg.InputPeerChat:
     case *tg.InputPeerEmpty:
@@ -449,7 +449,8 @@ func (ctx *Context) UnbanChatMember(chatId, userId int64) (bool, error) {
 	if err != nil  {
 		return nil, err
 	}
-	switch _ = inputPeerUser.(type) {
+	switch inputPeerUser.(type) {
+	
 	case *tg.InputPeerUser:
 	case *tg.InputPeerEmpty:
         return nil, mtp_errors.ErrPeerNotFound
@@ -465,7 +466,7 @@ func (ctx *Context) AddChatMembers(chatId int64, userIds []int64, forwardLimit i
 	if err != nil  {
 		return false, err
 	}
-	switch _ = inputPeerChat.(type) {
+	switch inputPeerChat.(type) {
     case *tg.InputPeerChannel:
     case *tg.InputPeerChat:
     case *tg.InputPeerEmpty:
@@ -479,7 +480,7 @@ func (ctx *Context) AddChatMembers(chatId int64, userIds []int64, forwardLimit i
 		if err != nil  {
 			return false, err
 		}
-		switch p = inputPeerUser.(type) {
+		switch p := inputPeerUser.(type) {
 		case *tg.InputPeerUser:
 			userPeers[i] = &tg.InputUser{
 				UserID:     p.UserID,
@@ -506,7 +507,7 @@ func (ctx *Context) ArchiveChats(chatIds []int64) (bool, error) {
 		if err != nil  {
 			return false, err
 		}
-		switch _ = inputPeer.(type) {
+		switch inputPeer.(type) {
 	    case *tg.InputPeerChannel:
 	    case *tg.InputPeerChat:
 	    case *tg.InputPeerUser:
@@ -532,7 +533,7 @@ func (ctx *Context) UnarchiveChats(chatIds []int64) (bool, error) {
 		if err != nil  {
 			return false, err
 		}
-		switch _ = inputPeer.(type) {
+		switch inputPeer.(type) {
 	    case *tg.InputPeerChannel:
 	    case *tg.InputPeerChat:
 	    case *tg.InputPeerUser:
