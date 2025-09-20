@@ -379,7 +379,7 @@ func (ctx *Context) GetChat(chatId int64) (tg.ChatFullClass, error) {
 
 // GetUser returns tg.UserFull of the provided user id.
 func (ctx *Context) GetUser(userId int64) (*tg.UserFull, error) {
-	inputPeer, err := ctx.ResolveInputPeerById(chatId)
+	inputPeer, err := ctx.ResolveInputPeerById(userId)
 	if err != nil  {
 		return nil, err
 	}
@@ -413,18 +413,20 @@ func (ctx *Context) BanChatMember(chatId, userId int64, untilDate int) (tg.Updat
     case *tg.InputPeerChannel:
     case *tg.InputPeerChat:
     case *tg.InputPeerEmpty:
-        return nil, mtp_errors.ErrPeerNotFound
+			return nil, mtp_errors.ErrPeerNotFound
     default:
-        return nil, mtp_errors.ErrNotChat
+			return nil, mtp_errors.ErrNotChat
     }
-	inputPeerUser, err := ctx.ResolveInputPeerById(userId)
+	var inputPeerUser tg.InputPeerUser
+	inputPeer, err := ctx.ResolveInputPeerById(userId)
 	if err != nil  {
 		return nil, err
 	}
-	switch inputPeerUser.(type) {
+	switch p := inputPeer.(type) {
 	case *tg.InputPeerUser:
+		inputPeerUser = p
 	case *tg.InputPeerEmpty:
-        return nil, mtp_errors.ErrPeerNotFound
+		return nil, mtp_errors.ErrPeerNotFound
 	default:
 		return nil, mtp_errors.ErrNotUser
 	}
@@ -435,27 +437,29 @@ func (ctx *Context) BanChatMember(chatId, userId int64, untilDate int) (tg.Updat
 func (ctx *Context) UnbanChatMember(chatId, userId int64) (bool, error) {
 	inputPeerChat, err :=  ctx.ResolveInputPeerById(chatId)
 	if err != nil  {
-		return nil, err
+		return false, err
 	}
 	switch inputPeerChat.(type) {
     case *tg.InputPeerChannel:
     case *tg.InputPeerChat:
     case *tg.InputPeerEmpty:
-        return nil, mtp_errors.ErrPeerNotFound
+			return false, mtp_errors.ErrPeerNotFound
     default:
-        return nil, mtp_errors.ErrNotChat
+			return false, mtp_errors.ErrNotChat
     }
-	inputPeerUser, err := ctx.ResolveInputPeerById(userId)
+	var inputPeerUser tg.InputPeerUser
+	inputPeer, err := ctx.ResolveInputPeerById(userId)
 	if err != nil  {
-		return nil, err
+		return false, err
 	}
-	switch inputPeerUser.(type) {
+	switch p := inputPeer.(type) {
 	
 	case *tg.InputPeerUser:
+		inputPeerUser= p
 	case *tg.InputPeerEmpty:
-        return nil, mtp_errors.ErrPeerNotFound
+    return false, mtp_errors.ErrPeerNotFound
 	default:
-		return nil, mtp_errors.ErrNotUser
+		return false, mtp_errors.ErrNotUser
 	}
 	return functions.UnbanChatMember(ctx, ctx.Raw, inputPeerChat, inputPeerUser)
 }
@@ -580,7 +584,7 @@ func (ctx *Context) CreateChat(title string, userIds []int64) (*tg.Chat, error) 
 func (ctx *Context) DeleteMessages(chatId int64, messageIDs []int) error {
 	inputPeer, err := ctx.ResolveInputPeerById(chatId)
 	if err != nil  {
-		return nil, err
+		return err
 	}
 	switch p := inputPeer.(type) {
     case *tg.InputPeerChannel:
@@ -599,9 +603,9 @@ func (ctx *Context) DeleteMessages(chatId int64, messageIDs []int) error {
 		})
 		return err
     case *tg.InputPeerEmpty:
-        return nil, mtp_errors.ErrPeerNotFound
+        return mtp_errors.ErrPeerNotFound
     default:
-        return nil, mtp_errors.ErrNotChat
+        return mtp_errors.ErrNotChat
     }
 }
 
