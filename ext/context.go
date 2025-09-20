@@ -404,7 +404,7 @@ func (ctx *Context) GetMessages(chatId int64, messageIds []tg.InputMessageClass)
 }
 
 // BanChatMember is used to ban a user from a chat.
-func (ctx *Context) BanChatMember(chatId, userId int64, untilDate int) (tg.UpdatesClass, error) {
+func (ctx *Context) BanChatMember(chatId, userID int64, untilDate int) (tg.UpdatesClass, error) {
 	inputPeerChat, err :=  ctx.ResolveInputPeerById(chatId)
 	if err != nil  {
 		return nil, err
@@ -417,8 +417,8 @@ func (ctx *Context) BanChatMember(chatId, userId int64, untilDate int) (tg.Updat
     default:
 			return nil, mtp_errors.ErrNotChat
     }
-	var inputPeerUser tg.InputPeerUser
-	inputPeer, err := ctx.ResolveInputPeerById(userId)
+	var inputPeerUser *tg.InputPeerUser
+	inputPeer, err := ctx.ResolveInputPeerById(userID)
 	if err != nil  {
 		return nil, err
 	}
@@ -434,21 +434,22 @@ func (ctx *Context) BanChatMember(chatId, userId int64, untilDate int) (tg.Updat
 }
 
 // UnbanChatMember is used to unban a user from a chat.
-func (ctx *Context) UnbanChatMember(chatId, userId int64) (bool, error) {
-	inputPeerChat, err :=  ctx.ResolveInputPeerById(chatId)
+func (ctx *Context) UnbanChatMember(chatID, userID int64) (bool, error) {
+	var inputPeerChat *tg.InputPeerChannel
+	inputPeer, err :=  ctx.ResolveInputPeerById(chatID)
 	if err != nil  {
 		return false, err
 	}
-	switch inputPeerChat.(type) {
+	switch p := inputPeer.(type) {
     case *tg.InputPeerChannel:
-    case *tg.InputPeerChat:
+			inputPeerChat = p
     case *tg.InputPeerEmpty:
 			return false, mtp_errors.ErrPeerNotFound
     default:
-			return false, mtp_errors.ErrNotChat
+			return false, mtp_errors.ErrNotChannel
     }
-	var inputPeerUser tg.InputPeerUser
-	inputPeer, err := ctx.ResolveInputPeerById(userId)
+	var inputPeerUser *tg.InputPeerUser
+	inputPeer, err = ctx.ResolveInputPeerById(userID)
 	if err != nil  {
 		return false, err
 	}
